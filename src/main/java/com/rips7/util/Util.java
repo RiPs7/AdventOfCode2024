@@ -46,7 +46,11 @@ public class Util {
     UP(Vector2D.of(-1, 0)),
     RIGHT(Vector2D.of(0, 1)),
     DOWN(Vector2D.of(1, 0)),
-    LEFT(Vector2D.of(0, -1));
+    LEFT(Vector2D.of(0, -1)),
+    UP_RIGHT(Vector2D.of(-1, 1)),
+    RIGHT_DOWN(Vector2D.of(1, 1)),
+    DOWN_LEFT(Vector2D.of(1, -1)),
+    LEFT_UP(Vector2D.of(-1, -1));
 
     private final Vector2D<Integer> value;
 
@@ -209,6 +213,10 @@ public class Util {
     IntStream.range(0, arr.length).forEach(r -> IntStream.range(0, arr[r].length).forEach(c -> cb.accept(arr[r][c])));
   }
 
+  public static <T> void loop2D(final T[][] arr, final TriConsumer<T, Integer, Integer> cb) {
+    IntStream.range(0, arr.length).forEach(r -> IntStream.range(0, arr[r].length).forEach(c -> cb.accept(arr[r][c], r, c)));
+  }
+
   public static <T> void print2DArray(final T[][] arr) {
     print2DArray(arr, T::toString);
   }
@@ -261,5 +269,11 @@ public class Util {
   }
 
   public record TimedResult<T>(T res, String timeInfo) {}
+
+  @FunctionalInterface
+  public interface TriConsumer<T,U,V> {
+
+    void accept(T t, U u, V v);
+  }
 
 }
