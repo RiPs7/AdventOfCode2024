@@ -81,6 +81,40 @@ public class Util {
     }
   }
 
+  public enum Direction {
+    UP(Offset.UP),
+    UP_RIGHT(Offset.UP_RIGHT),
+    RIGHT(Offset.RIGHT),
+    RIGHT_DOWN(Offset.RIGHT_DOWN),
+    DOWN(Offset.DOWN),
+    DOWN_LEFT(Offset.DOWN_LEFT),
+    LEFT(Offset.LEFT),
+    LEFT_UP(Offset.LEFT_UP);
+
+    final Offset offset;
+
+    Direction(final Offset offset) {
+      this.offset = offset;
+    }
+
+    public Offset offset() {
+      return offset;
+    }
+
+    public Direction rotate90() {
+      return switch(this) {
+        case UP -> RIGHT;
+        case UP_RIGHT -> RIGHT_DOWN;
+        case RIGHT -> DOWN;
+        case RIGHT_DOWN -> DOWN_LEFT;
+        case DOWN -> LEFT;
+        case DOWN_LEFT -> LEFT_UP;
+        case LEFT -> UP;
+        case LEFT_UP -> UP_RIGHT;
+      };
+    }
+  }
+
   public static String readResource(final String filename) {
     try (InputStream in = Util.class.getResourceAsStream(filename)) {
       return new String(Objects.requireNonNull(in).readAllBytes());
@@ -266,6 +300,12 @@ public class Util {
       }
     }
     return true;
+  }
+
+  public static <T> T[][] copy2D(final Class<T> clazz, final T[][] arr) {
+    final T[][] clone = newGeneric2DArray(clazz, arr.length, arr[0].length);
+    loop2D(arr, (e, r, c) -> clone[r][c] = e);
+    return clone;
   }
 
   public record TimedResult<T>(T res, String timeInfo) {}

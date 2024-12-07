@@ -1,6 +1,7 @@
 package com.rips7.day;
 
 import com.rips7.util.Util;
+import com.rips7.util.Util.Direction;
 import com.rips7.util.Util.Offset;
 import com.rips7.util.Util.Position;
 import com.rips7.util.Util.TriConsumer;
@@ -30,7 +31,7 @@ public class Day4 implements Day<Long> {
           int letterIndex;
           for (letterIndex = 1; letterIndex < wordToLookFor.length(); letterIndex++) {
             // Move along the direction we are checking
-            final Position nextPos = pos.apply(dir.offset);
+            final Position nextPos = pos.apply(dir.offset());
             // If we end up outside the grid, or the current spot does not contain the letter we are looking for, break
             if (puzzle.get(nextPos) != wordToLookFor.charAt(letterIndex)) {
               break;
@@ -111,23 +112,6 @@ public class Day4 implements Day<Long> {
 
     private int width() {
       return chars[0].length;
-    }
-  }
-
-  private enum Direction {
-    UP(Offset.UP),
-    UP_RIGHT(Offset.UP_RIGHT),
-    RIGHT(Offset.RIGHT),
-    RIGHT_DOWN(Offset.RIGHT_DOWN),
-    DOWN(Offset.DOWN),
-    DOWN_LEFT(Offset.DOWN_LEFT),
-    LEFT(Offset.LEFT),
-    LEFT_UP(Offset.LEFT_UP);
-
-    final Offset offset;
-
-    Direction(final Offset offset) {
-      this.offset = offset;
     }
   }
 }
