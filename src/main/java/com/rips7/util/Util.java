@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Array;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.Callable;
@@ -63,7 +64,7 @@ public class Util {
     }
   }
 
-  public record Position(Vector2D<Integer> value) {
+  public record Position(Vector2D<Integer> value) implements Comparable<Position> {
     public static Position of(final int i, final int j) {
       return new Position(Vector2D.of(i, j));
     }
@@ -78,6 +79,13 @@ public class Util {
 
     public int y() {
       return value.y();
+    }
+
+    @Override
+    public int compareTo(final Position o) {
+      return Comparator.comparingInt((Position p) -> p.value.x())
+          .thenComparingInt(p -> p.value.y())
+          .compare(this, o);
     }
   }
 
