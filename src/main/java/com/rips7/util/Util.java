@@ -121,6 +121,10 @@ public class Util {
         case LEFT_UP -> UP_RIGHT;
       };
     }
+
+    public Direction rotateNeg90() {
+      return rotate90().rotate90().rotate90();
+    }
   }
 
   public static String readResource(final String filename) {
@@ -133,6 +137,14 @@ public class Util {
 
   public static Stream<String> lines(final String input) {
     return Arrays.stream(input.split("\n"));
+  }
+
+  public static Character[][] grid(final String input) {
+    return Util.lines(input)
+      .map(line -> line.chars()
+        .mapToObj(c -> (char) c)
+        .toArray(Character[]::new))
+      .toArray(Character[][]::new);
   }
 
   public static boolean isBlank(final String input) {
@@ -314,6 +326,31 @@ public class Util {
     final T[][] clone = newGeneric2DArray(clazz, arr.length, arr[0].length);
     loop2D(arr, (e, r, c) -> clone[r][c] = e);
     return clone;
+  }
+
+  public record Grid<T>(T[][] grid, T defaultValue) {
+    public static <T> Grid<T> of(final T[][] grid) {
+      return of(grid, null);
+    }
+
+    public static <T> Grid<T> of(final T[][] grid, final T defaultValue) {
+      return new Grid<>(grid, defaultValue);
+    }
+
+    public T get(final Position pos) {
+      return isWithinGrid(pos, grid) ? grid[pos.x()][pos.y()] : defaultValue;
+    }
+
+    public Position find(final T value) {
+      for (int r = 0; r < grid.length; r++) {
+        for (int c = 0; c < grid[r].length; c++) {
+          if (Objects.equals(grid[r][c], value)) {
+            return Position.of(r, c);
+          }
+        }
+      }
+      throw new RuntimeException("Cannot find %s in the grid".formatted(value));
+    }
   }
 
   public record TimedResult<T>(T res, String timeInfo) {}
