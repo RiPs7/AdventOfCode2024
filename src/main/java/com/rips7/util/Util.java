@@ -341,6 +341,10 @@ public class Util {
       return isWithinGrid(pos, grid) ? grid[pos.x()][pos.y()] : defaultValue;
     }
 
+    public T get(final int row, final int col) {
+      return isWithinGrid(row, col, grid) ? grid[row][col] : defaultValue;
+    }
+
     public Position find(final T value) {
       for (int r = 0; r < grid.length; r++) {
         for (int c = 0; c < grid[r].length; c++) {
@@ -350,6 +354,15 @@ public class Util {
         }
       }
       throw new RuntimeException("Cannot find %s in the grid".formatted(value));
+    }
+
+    @Override
+    public String toString() {
+      return Arrays.stream(grid)
+        .map(r -> Arrays.stream(r)
+          .map(String::valueOf)
+          .collect(Collectors.joining()))
+        .collect(Collectors.joining("\n"));
     }
   }
 
