@@ -276,11 +276,15 @@ public class Util {
   }
 
   public static <T> void print2DArray(final T[][] arr, final Function<T, String> stringifier) {
+    print2DArray(arr, stringifier, "");
+  }
+
+  public static <T> void print2DArray(final T[][] arr, final Function<T, String> stringifier, final String delimiter) {
     System.out.println(Arrays.stream(arr)
-        .map(row -> Arrays.stream(row)
-            .map(stringifier)
-            .collect(Collectors.joining()))
-        .collect(Collectors.joining("\n")));
+      .map(row -> Arrays.stream(row)
+        .map(stringifier)
+        .collect(Collectors.joining(delimiter)))
+      .collect(Collectors.joining("\n")));
   }
 
   @SuppressWarnings("unchecked")
@@ -354,6 +358,14 @@ public class Util {
         }
       }
       throw new RuntimeException("Cannot find %s in the grid".formatted(value));
+    }
+
+    public int rows() {
+      return grid.length;
+    }
+
+    public int cols() {
+      return grid[0].length;
     }
 
     @Override
