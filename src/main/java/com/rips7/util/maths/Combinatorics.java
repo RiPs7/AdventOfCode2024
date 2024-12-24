@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 @SuppressWarnings("unused")
 public class Combinatorics {
@@ -43,6 +45,25 @@ public class Combinatorics {
       nextPermutation = getNextPermutation(nextPermutation);
     }
     return result;
+  }
+
+  public static <T> List<T> product(final List<List<T>> lists, final BiFunction<T, T, T> operation) {
+    if (lists.size() < 2) {
+      return lists.getFirst();
+    }
+    final List<T> firstSecondResult = product(lists.getFirst(), lists.get(1), operation);
+    final List<List<T>> newLists = Stream.concat(
+        Stream.of(firstSecondResult),
+        lists.subList(2, lists.size()).stream())
+      .toList();
+    return product(newLists, operation);
+  }
+
+  public static <T> List<T> product(final List<T> list1, final List<T> list2, final BiFunction<T, T, T> operation) {
+    return list1.stream()
+      .flatMap(e1 -> list2.stream()
+        .map(e2 -> operation.apply(e1, e2)))
+      .toList();
   }
 
   public static <T> Map<T, Long> frequencyMap(final T[] input) {
