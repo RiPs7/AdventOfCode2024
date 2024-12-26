@@ -14,7 +14,7 @@ import java.util.stream.IntStream;
 
 public class Day14 implements Day<Long> {
 
-  private static final boolean PRINT_ANSWER_PART_2 = true;
+  private static final boolean PRINT_ANSWER_PART_2 = false;
 
   private static final int WIDTH = 101;
   private static final int HEIGHT = 103;
